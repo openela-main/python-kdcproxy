@@ -1,0 +1,28 @@
+From 5cfde6d085320da3fb5d4c6506e6d6253438669c Mon Sep 17 00:00:00 2001
+From: Robbie Harwood <rharwood@redhat.com>
+Date: Fri, 2 Aug 2019 13:54:05 -0400
+Subject: [PATCH] Correct addrs sorting to be by TCP/UDP
+
+Fixes any potential cases where the resolver might yield UDP addresses
+first.
+
+Signed-off-by: Robbie Harwood <rharwood@redhat.com>
+(cherry picked from commit d0b35c2b71a172f409b4311d36538d8fa3433c58)
+---
+ kdcproxy/__init__.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kdcproxy/__init__.py b/kdcproxy/__init__.py
+index c59f2b3..6526bc9 100644
+--- a/kdcproxy/__init__.py
++++ b/kdcproxy/__init__.py
+@@ -227,7 +227,8 @@ class Application:
+                 #
+                 # Stick a None address on the end so we can get one
+                 # more attempt after all servers have been contacted.
+-                addrs = tuple(sorted(filter(self.__filter_addr, addrs)))
++                addrs = tuple(sorted(filter(self.__filter_addr, addrs),
++                                     key=lambda a: a[2]))
+                 for addr in addrs + (None,):
+                     if addr is not None:
+                         # Bypass unspecified socktypes

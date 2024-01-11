@@ -1,0 +1,36 @@
+From 2164f10fe5d992006f42c4a8d682f23b04ffbf12 Mon Sep 17 00:00:00 2001
+From: Robbie Harwood <rharwood@redhat.com>
+Date: Thu, 9 Aug 2018 14:57:56 -0400
+Subject: [PATCH] Make webtest an optional dependency
+
+Resolves: #38
+(cherry picked from commit c0bee88c60deb176d420d90447d24c370d70727a)
+---
+ tests.py | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/tests.py b/tests.py
+index 992529f..c2b1fc0 100644
+--- a/tests.py
++++ b/tests.py
+@@ -33,7 +33,11 @@ from dns.rdataclass import IN as RDCLASS_IN
+ from dns.rdatatype import SRV as RDTYPE_SRV
+ from dns.rdtypes.IN.SRV import SRV
+ 
+-from webtest import TestApp as WebTestApp
++try:
++    from webtest import TestApp as WebTestApp
++except ImportError:
++    print("webtest not installed!  Tests will be skipped")
++    WebTestApp = "skip"
+ 
+ import kdcproxy
+ from kdcproxy import codec
+@@ -45,6 +49,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
+ KRB5_CONFIG = os.path.join(HERE, 'tests.krb5.conf')
+ 
+ 
++@unittest.skipIf(WebTestApp == "skip", "webtest not installed")
+ class KDCProxyWSGITests(unittest.TestCase):
+     addrinfo = [
+         (2, 1, 6, '', ('128.66.0.2', 88)),
