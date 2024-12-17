@@ -14,7 +14,7 @@
 
 Name:           python-%{realname}
 Version:        0.4
-Release:        5%{?dist}
+Release:        5%{?dist}.1
 Summary:        MS-KKDCP (kerberos proxy) WSGI module
 
 License:        MIT
@@ -24,6 +24,8 @@ Source0:        https://github.com/npmccallum/%{realname}/archive/%{realname}-%{
 Patch0: Make-webtest-an-optional-dependency.patch
 Patch1: Correct-addrs-sorting-to-be-by-TCP-UDP.patch
 Patch2: Always-buffer-TCP-data-in-__handle_recv.patch
+Patch3: Use-exponential-backoff-for-connection-retries.patch
+Patch4: Use-dedicated-kdcproxy-logger.patch
 
 BuildArch:      noarch
 BuildRequires:  git
@@ -125,6 +127,10 @@ KDCPROXY_ASN1MOD=asn1crypto %{__python3} -m pytest
 %endif
 
 %changelog
+* Fri Nov 22 2024 Julien Rische <jrische@redhat.com> - 0.4-5.1
+- Log KDC timeout only once per request
+  Resolves: RHEL-68634
+
 * Fri Oct 25 2019 Robbie Harwood <rharwood@redhat.com> - 0.4-5
 - Always buffer TCP data in __handle_recv()
 - Resolves: #1747144
