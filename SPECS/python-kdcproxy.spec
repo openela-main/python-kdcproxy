@@ -2,7 +2,7 @@
 
 Name:           python-%{realname}
 Version:        1.0.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        MS-KKDCP (kerberos proxy) WSGI module
 
 License:        MIT
@@ -10,6 +10,8 @@ URL:            https://github.com/latchset/%{realname}
 Source0:        https://github.com/latchset/%{realname}/archive/%{realname}-%{version}.tar.gz
 
 Patch0: Drop-coverage-from-tests.patch
+Patch1: Use-exponential-backoff-for-connection-retries.patch
+Patch2: Use-dedicated-kdcproxy-logger.patch
 
 BuildArch:      noarch
 BuildRequires:  git
@@ -56,6 +58,10 @@ minimal configuration.
 %{python3_sitelib}/%{realname}-%{version}-*.egg-info
 
 %changelog
+* Fri Nov 22 2024 Julien Rische <jrische@redhat.com> - 1.0.0-8
+- Log KDC timeout only once per request
+  Resolves: RHEL-68355
+
 * Tue Aug 10 2021 Mohan Boddu <mboddu@redhat.com> - 1.0.0-7
 - Rebuilt for IMA sigs, glibc 2.34, aarch64 flags
   Related: rhbz#1991688
