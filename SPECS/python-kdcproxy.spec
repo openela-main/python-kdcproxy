@@ -2,16 +2,18 @@
 
 Name:           python-%{realname}
 Version:        1.0.0
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        MS-KKDCP (kerberos proxy) WSGI module
 
 License:        MIT
 URL:            https://github.com/latchset/%{realname}
 Source0:        https://github.com/latchset/%{realname}/archive/%{realname}-%{version}.tar.gz
 
-Patch0: Drop-coverage-from-tests.patch
-Patch1: Use-exponential-backoff-for-connection-retries.patch
-Patch2: Use-dedicated-kdcproxy-logger.patch
+Patch0001: Drop-coverage-from-tests.patch
+Patch0002: Use-exponential-backoff-for-connection-retries.patch
+Patch0003: Use-dedicated-kdcproxy-logger.patch
+Patch0004: 0004-Fix-DoS-vulnerability-based-on-unbounded-TCP-bufferi.patch
+Patch0005: 0005-Use-DNS-discovery-for-declared-realms-only.patch
 
 BuildArch:      noarch
 BuildRequires:  git
@@ -58,6 +60,12 @@ minimal configuration.
 %{python3_sitelib}/%{realname}-%{version}-*.egg-info
 
 %changelog
+* Mon Oct 20 2025 Julien Rische <jrische@redhat.com> - 1.0.0-9
+- Use DNS discovery for declared realms only (CVE-2025-59088)
+  Resolves: RHEL-122779
+- Fix DoS vulnerability based on unbounded TCP buffering (CVE-2025-59089)
+  Resolves: RHEL-122778
+
 * Fri Nov 22 2024 Julien Rische <jrische@redhat.com> - 1.0.0-8
 - Log KDC timeout only once per request
   Resolves: RHEL-68355
